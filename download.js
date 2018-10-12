@@ -28,7 +28,7 @@
 			defaultMime = "application/octet-stream", // this default mime also triggers iframe downloads
 			mimeType = strMimeType || defaultMime,
 			payload = data,
-			url = !strFileName && !strMimeType && payload,
+			url = (Object.prototype.toString.call(payload) ==='[object String]'&&payload.match(/^https?:\/\//) != null) && payload || false,
 			anchor = document.createElement("a"),
 			toString = function(a){return String(a);},
 			myBlob = (self.Blob || self.MozBlob || self.WebKitBlob || toString),
@@ -45,7 +45,7 @@
 
 
 		if(url && url.length< 2048){ // if no filename and no mime, assume a url was passed as the only argument
-			fileName = url.split("/").pop().split("?")[0];
+			fileName = fileName || url.split("/").pop().split("?")[0];
 			anchor.href = url; // assign href prop to temp anchor
 		  	if(anchor.href.indexOf(url) !== -1){ // if the browser determines that it's a potentially valid url path:
         		var ajax=new XMLHttpRequest();
