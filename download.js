@@ -101,16 +101,18 @@
 
 		function saver(url, winMode){
 
+			var _clickEvt = function(e) {
+				e.stopPropagation();
+				this.removeEventListener('click', _clickEvt);
+			}
 			if ('download' in anchor) { //html5 A[download]
 				anchor.href = url;
 				anchor.setAttribute("download", fileName);
 				anchor.className = "download-js-link";
 				anchor.innerHTML = "downloading...";
 				anchor.style.display = "none";
- 				anchor.addEventListener('click', function(e) {
- 					e.stopPropagation();
- 					this.removeEventListener('click', arguments.callee);
- 				});
+				
+				anchor.addEventListener('click', _clickEvt);
 				document.body.appendChild(anchor);
 				setTimeout(function() {
 					anchor.click();
